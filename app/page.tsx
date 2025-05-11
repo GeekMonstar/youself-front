@@ -1,32 +1,21 @@
-"use client";
-
-import { authClient } from "@/lib/auth-client";
-import { signInWithGoogle } from "@/lib/sign-in";
-import { use, useEffect } from "react";
+// "use client";
+import { use } from "react";
+import { getPosts } from "./action";
+import PostCard from "@/components/cards/post";
 
 export default function Home() {
-
-  // const {data: session, error} = use(authClient.getSession());
-  // useEffect(()=>{
-  //   console.log("Session data:", session);
-  // }, [])
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    signInWithGoogle()
-      .then((response) => {
-        console.log("Response from signInWithGoogle:", response);
-      })
-      .catch((error) => {
-        console.error("Error during signInWithGoogle:", error);
-      });
-  };
+  // useEffect(() => {
+  //   const posts = use(getPosts());
+  //   console.log(posts);
+  // }, []);
+  const posts = use(getPosts()) || [];
+  console.log(posts);
   return (
-    <div>
-      {/* {data && data.user.name} */}
-      <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center h-screen">
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">Connect with Google</button>
-      </form>
+    <div className="w-full flex flex-row gap-2 ml-2">
+      <div className="w-full lg:w-7/12 flex flex-col h-screen gap-2">
+        {posts.map((post) => PostCard({ post }))}
+      </div>
+      <div className="hidden md:flex md:w-5/12 bg-blue-500"></div>
     </div>
   );
 }
